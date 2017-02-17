@@ -1,0 +1,76 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "edu.pitt.amh217.LinkChecker"
+        }
+    }
+}

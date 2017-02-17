@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+	
+	<title>Link Checker</title>
+	<link rel="stylesheet" href="styles/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="styles/linkChecker.css">
+	<link rel="stylesheet" href="styles/jquery.mobile.icons.min.css">
+	<link rel="stylesheet" href="styles/linkChecker.css">
+	<script src="js/jquery-2.1.1.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	
+	<script type="text/javascript">
+            //When the document is ready
+			$(document).ready(function(){
+                document.getElementById('detailedButton').style.display = 'none';
+			});
+			
+			function checkLink(){
+                
+			     //Google API Key
+                var apiKey =  "AIzaSyDNooFL9YfyH8S4Lf5PZlm5q-CpuMNVEYg";
+                
+                //URL for safebrowsing
+                var googleURL = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=";
+                
+                //Combine the url and the key
+                googleURL = googleURL + apiKey;
+ 
+                
+                
+                //Get the Website to test- Thanks to Mozilla for assistance.
+                var websiteToTest = document.getElementById("websiteToCheck").value;
+               
+                
+                //attempt to contact the google server
+                
+                if(websiteToTest != "" && validateURL(websiteToTest)){
+                    //Payload to send to Google
+                    var payload = 
+                    {
+                        //Client
+                        "client": {
+                          "clientId": "infsci1073amh217",
+                          "clientVersion": "1.0.0"
+                        },
+                        "threatInfo": {
+                          "threatTypes":      ["MALWARE", "SOCIAL_ENGINEERING","UNWANTED_SOFTWARE","POTENTIALLY_HARMFUL_APPLICATION"],
+                          "platformTypes":    ["WINDOWS", "LINUX", "ANDROID", "OSX", "IOS"],
+                          "threatEntryTypes": ["URL"],
+                          "threatEntries": [
+                            {"url": websiteToTest},
+                          ]
+                        }
+                      };
+
+                    //Thanks to Alex Wozniak on the Google Group for the suggestion.
+                    var stringOfJson = JSON.stringify(payload);
+
+                    //Send the ajax to the server using POST.
+                    $.ajax({
+                        type: "POST",
+                        url: googleURL,
+                       contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stringOfJson,
+                    //If Successfull
+                    success:function (data) {
+                        //If it's an empty object, Google says it's clean or is not scanned.
+                         if(jQuery.isEmptyObject(data)){
+                             //Tell the user it's a good website.
+                             $("#mainResults").html("<p><img src='img/check.png' width='20px'> &nbsp; Google reports no issues for " + websiteToTest + ".</p>");
+                             //Add details to session storage
+                             sessionStorage.bad = "false";
+                             sessionStorage.url = websiteToTest;
+                             
+                             
+                        //Else it's a bad site, get more details
+                         }else{
+                             //Print that it's a bad website
+                             $("#mainResults").html("<p><img src='img/redx.png' width='20px'> &nbsp;Google reports " + websiteToTest + " has security issues.</p>");
+                             
+                             //Get more details of the treat to put into the more specific details. -- Go to session storage.
+                             
+                             //URL
+                             sessionStorage.url = data.matches[0].threat.url;
+                             
+                             sessionStorage.bad = "true";
+                             
+                             sessionStorage.threat = "";
+                             sessionStorage.platform = "";
+                             
+                             //Type
+                             sessionStorage.threat = data.matches[0].threatType;
+                             
+                             for(var i=0; i < data.matches.length; i++){
+                                //Platform
+                                sessionStorage.platform = sessionStorage.platform + data.matches[i].platformType + "<br/>"; 
+                             }
+                                                
+                         }
+                        document.getElementById('detailedButton').style.display = '';
+                    },
+                    //If there is an error, log it to the console.
+                    error:function(status){
+                        console.log(status);
+                    }
+                    });
+
+                }else{
+                    alert("Please enter a valid URL.");
+                }
+            }
+            
+            function showDetails(){
+                window.location.href="#detailedResults";
+                var bad = (sessionStorage.bad);
+                if(bad === "true"){
+                    var htmlString = "<h1><img src='images/redx.png' width='40px'>Website Has Issues</h1><p>Google reports that the website " + sessionStorage.url + "has security alerts realted to it  Please see details below.</p><table><tr><td>URL</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.url + "</td></tr><td>Type Of Threat</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.threat + "</td></tr><tr><td>Platform</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.platform + "</td></tr></table>";
+                    $("#details").html(htmlString);
+                }else{
+                    var htmlString = "<h1><img src='images/check.png' width='40px'>Website Has No Issues</h1><p>Google reports that the website " + sessionStorage.url + " does not have any security alerts for it.</p>";
+                     $("#details").html(htmlString);
+                }
+ 
+            }
+            
+            function goBackHome(){
+                window.location.href="#home";
+            }
+			
+			//Thanks to nhahtdh on Stack Overflow for this base code (http://stackoverflow.com/questions/1303872/trying-to-validate-url-using-javascript)- used with modification.
+			function validateURL(textval) {
+				var urlregex = /^((https?|ftp):\/\/)?([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}|[a-zA-Z]{3}|[a-zA-Z]{4}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+				return urlregex.test(textval);
+			}
+		</script>    
+	
+</head>
+
+<body>
+    <div class="app">
+ <div data-role="page" id="home">
+            <div data-role="header">Link Checker</div>
+            <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
+            <div data-role="content">
+                
+                <p>Below, please enter in the URL for the website you would like to check.</p>
+                <label for="websiteToCheck">URL:
+                    <input type="text" value="" id="websiteToCheck" /></label>
+                
+                <input type="button" onClick="checkLink()" value="Check Website"/>
+                <div id="mainResults"></div>
+                <button onClick='showDetails()' id='detailedButton'>See Detailed Report</button>
+            </div>
+                
+            <div data-role="footer">Developed by Allen Howard 
+            (amh217@pitt.edu)</div>
+        </div>
+    
+        <div data-role="page" id="about">
+            <div data-role="header">About Link Checker</div>
+            <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
+            <div data-role="content"><p>This application uses Google's Safe Links to help a user determine if a website is safe to go to or not.  These are only to be taken as suggestions as attack websites are constantly changing.  Always use your best judgement to determine if you should be on a website or not.</p></div>
+            <div data-role="footer">Developed by Allen Howard 
+            (amh217@pitt.edu)</div>
+        </div>
+        
+        <div data-role="page" id="detailedResults">
+            <div data-role="header">Link Checker</div>
+                <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
+                <div data-role="content">
+                    <div id="details"></div>
+                    <button onClick='goBackHome()'>Go Back</button>
+            </div>
+            <div data-role="footer">Developed by Allen Howard 
+                (amh217@pitt.edu)</div>
+        </div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>
