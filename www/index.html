@@ -154,10 +154,10 @@
                 window.location.href="#detailedResults";
                 var bad = (sessionStorage.bad);
                 if(bad === "true"){
-                    var htmlString = "<h1><img src='images/redx.png' width='40px'>Website Has Issues</h1><p>Google reports that the website " + sessionStorage.url + "has security alerts realted to it  Please see details below.</p><table><tr><td>URL</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.url + "</td></tr><td>Type Of Threat</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.threat + "</td></tr><tr><td>Platform</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.platform + "</td></tr></table>";
+                    var htmlString = "<h1><img src='img/redx.png' width='40px'>Website Has Issues</h1><p>Google reports that the website " + sessionStorage.url + "has security alerts realted to it  Please see details below.</p><table><tr><td>URL</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.url + "</td></tr><td>Type Of Threat</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.threat + "</td></tr><tr><td>Platform</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.platform + "</td></tr></table>";
                     $("#details").html(htmlString);
                 }else{
-                    var htmlString = "<h1><img src='images/check.png' width='40px'>Website Has No Issues</h1><p>Google reports that the website " + sessionStorage.url + " does not have any security alerts for it.</p>";
+                    var htmlString = "<h1><img src='img/check.png' width='40px'>Website Has No Issues</h1><p>Google reports that the website " + sessionStorage.url + " does not have any security alerts for it.</p>";
                      $("#details").html(htmlString);
                 }
  
