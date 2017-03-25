@@ -45,8 +45,6 @@
 	<script src="js/jquery-2.1.1.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-
-   <!-- <link rel="stylesheet" type="text/css" href="css/index.css" /> -->
 	
 	<script type="text/javascript">
             //When the document is ready
@@ -154,17 +152,25 @@
                 window.location.href="#detailedResults";
                 var bad = (sessionStorage.bad);
                 if(bad === "true"){
-                    var htmlString = "<h1><img src='img/redx.png' width='40px'>Website Has Issues</h1><p>Google reports that the website " + sessionStorage.url + "has security alerts realted to it  Please see details below.</p><table><tr><td>URL</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.url + "</td></tr><td>Type Of Threat</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.threat + "</td></tr><tr><td>Platform</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.platform + "</td></tr></table>";
+                    var htmlString = "<h1><img src='img/redx.png' width='40px'>Website Has Issues</h1><p>Google reports that the website " + sessionStorage.url + "has security alerts related to it  Please see details below.</p><table><tr><td>URL</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.url + "</td></tr><td>Type Of Threat</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.threat + "</td></tr><tr><td>Platform</td><td>&nbsp;&nbsp;</td><td>" + sessionStorage.platform + "</td></tr></table>";
                     $("#details").html(htmlString);
                 }else{
                     var htmlString = "<h1><img src='img/check.png' width='40px'>Website Has No Issues</h1><p>Google reports that the website " + sessionStorage.url + " does not have any security alerts for it.</p>";
-                     $("#details").html(htmlString);
+                    $("#details").html(htmlString);
                 }
  
             }
             
             function goBackHome(){
                 window.location.href="#home";
+            }
+        
+            function goBackToDetail(){
+                window.location.href="#detailedResults";
+            }
+        
+            function learnMore(){
+                window.location.href="#learnMoreAboutViruses";
             }
 			
 			//Thanks to nhahtdh on Stack Overflow for this base code (http://stackoverflow.com/questions/1303872/trying-to-validate-url-using-javascript)- used with modification.
@@ -192,16 +198,14 @@
                 <button onClick='showDetails()' id='detailedButton'>See Detailed Report</button>
             </div>
                 
-            <div data-role="footer">Developed by Allen Howard 
-            (amh217@pitt.edu)</div>
+            <div data-role="footer"></div>
         </div>
     
         <div data-role="page" id="about">
             <div data-role="header">About Link Checker</div>
             <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
-            <div data-role="content"><p>This application uses Google's Safe Links to help a user determine if a website is safe to go to or not.  These are only to be taken as suggestions as attack websites are constantly changing.  Always use your best judgement to determine if you should be on a website or not.</p></div>
-            <div data-role="footer">Developed by Allen Howard 
-            (amh217@pitt.edu)</div>
+            <div data-role="content"><p>This application uses Google's Safe Browsing API to help a user determine if a website is safe to go to or not.<br/><br/>Reminder: These are only to be taken as suggestions as attack websites are constantly changing.  Always use your best judgement to determine if you should be on a website or not.<br/><br/>Created by Allen M. Howard (amh217@pitt.edu) and submitted to the Pitt Mobile App Challenge.</p></div>
+            <div data-role="footer"></div>
         </div>
         
         <div data-role="page" id="detailedResults">
@@ -209,10 +213,48 @@
                 <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
                 <div data-role="content">
                     <div id="details"></div>
+                    <button onClick='learnMore()'>Learn More about Threats</button>
                     <button onClick='goBackHome()'>Go Back</button>
             </div>
-            <div data-role="footer">Developed by Allen Howard 
-                (amh217@pitt.edu)</div>
+            <div data-role="footer"></div>
+        </div>
+        
+        <div data-role="page" id="learnMoreAboutViruses">
+            <div data-role="header">Link Checker</div>
+                <div data-role="navbar"><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li></ul></div>
+                <div data-role="content">
+                    <div id="details">
+                    Types of threats this app alerts about:
+                        <ul>
+                            <li>Malware- Any type of virus, work, logic bomb, trojan, etc. that can be downloaded to a computer that can cause an attacker to get remote access to your PC or data.</li>
+                            <li>Social Engineering- A technique in which scammers talk an innocent person to divulged personal information such as credit cards numbers, SSNs, or bank accounts.</li>
+                            <li>Unwanted Software- Software that isn't malicious, but may be considered bloatware or adware.</li>
+                            <li>Potentially Harmful Software- Software that can be harmful depending on how it is used.  Software in this category can have useful applictions, but can have serious consequences if improperly used.</li>
+                        </ul>
+                        
+                    This app also alerts a user as to which platforms may be vulnerable to the attacks or applications found within the websites.  These platforms include:
+                        <ul>
+                            <li>Windows</li>
+                            <li>Mac OS</li>
+                            <li>Linux</li>
+                            <li>Android</li>
+                            <li>iOS</li>
+                        </ul>
+                    How do you protect your devices?  The best way is to install antivirus software and update it regularly.  Some good antiviruses are listed below:
+                        <ul>
+                            <li>Symantec Endpoint Protection/ Norton Antivirus</li>
+                            <li>Avira</li>
+                            <li>Avast!</li>
+                            <li>McAfee</li>
+                            <li>Kapersky</li>
+                        </ul>
+                    While doing this is important, also remember to use good judgement while online.  Never go to a website that you are unsure about.  Never download a file that you can't verify is from a trustworthy source.
+                    <br/><br/>    
+                    Also remember to keep your operating system up to date with the latest security patches to ensure that all known exploits are secured.
+                    </div>
+                    <button onClick='goBackToDetail()'>Go Back</button>
+            </div>
+            <div data-role="footer"></div>
         </div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
